@@ -32,5 +32,3 @@ export function ExpenseForm() {
     </form>
   );
 }
-
-export default ExpenseForm;

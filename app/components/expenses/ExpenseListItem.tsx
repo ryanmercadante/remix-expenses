@@ -1,4 +1,8 @@
-export function ExpenseListItem({ title, amount }) {
+import type { Expense } from "~/routes/expenses";
+
+type ExpenseListItemProps = Omit<Expense, "date">;
+
+export function ExpenseListItem({ id, title, amount }: ExpenseListItemProps) {
   function deleteExpenseItemHandler() {
     // tbd
   }

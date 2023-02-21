@@ -1,6 +1,11 @@
+import type { Expense } from "~/routes/expenses";
 import { ChartBar } from "./ChartBar";
 
-export function Chart({ expenses }) {
+type ChartProps = {
+  expenses: Array<Expense>;
+};
+
+export function Chart({ expenses }: ChartProps) {
   const chartDataPoints = [
     { label: "Jan", value: 0 },
     { label: "Feb", value: 0 },

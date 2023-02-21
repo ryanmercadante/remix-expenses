@@ -1,6 +1,11 @@
+import type { Expense } from "~/routes/expenses";
 import { ExpenseListItem } from "./ExpenseListItem";
 
-export function ExpensesList({ expenses }) {
+type ExpensesListProps = {
+  expenses: Array<Expense>;
+};
+
+export function ExpensesList({ expenses }: ExpensesListProps) {
   return (
     <ol id="expenses-list">
       {expenses.map((expense) => (

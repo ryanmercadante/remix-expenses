@@ -1,4 +1,11 @@
-export function PricingPlan({ title, price, perks, icon }) {
+type PricingPlanProps = {
+  title: string;
+  price: number;
+  perks: Array<string>;
+  icon: string;
+};
+
+export function PricingPlan({ title, price, perks, icon }: PricingPlanProps) {
   const Icon = icon;
   return (
     <article>
