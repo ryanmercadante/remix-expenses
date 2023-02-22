@@ -1,8 +1,5 @@
-import type { LinksFunction } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
 import { ExpensesList } from "~/components/expenses/ExpensesList";
-
-import styles from "~/styles/expenses.css";
 
 export type Expense = {
   id: string;
@@ -36,5 +33,3 @@ export default function ExpensesLayout() {
     </>
   );
 }
-
-export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];

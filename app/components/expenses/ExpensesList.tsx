@@ -1,4 +1,4 @@
-import type { Expense } from "~/routes/expenses";
+import type { Expense } from "~/routes/__app/expenses";
 import { ExpenseListItem } from "./ExpenseListItem";
 
 type ExpensesListProps = {

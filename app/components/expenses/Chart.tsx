@@ -1,4 +1,4 @@
-import type { Expense } from "~/routes/expenses";
+import type { Expense } from "~/routes/__app/expenses";
 import { ChartBar } from "./ChartBar";
 
 type ChartProps = {

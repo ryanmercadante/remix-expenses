@@ -1,5 +1,5 @@
 import { Link } from "@remix-run/react";
-import type { Expense } from "~/routes/expenses";
+import type { Expense } from "~/routes/__app/expenses";
 
 type ExpenseListItemProps = Omit<Expense, "date">;
 
