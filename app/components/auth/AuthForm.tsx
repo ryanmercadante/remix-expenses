@@ -1,11 +1,18 @@
-import { Link } from "@remix-run/react";
-import { FaLock } from "react-icons/fa";
+import { Link, useSearchParams } from "@remix-run/react";
+import { FaLock, FaUserPlus } from "react-icons/fa";
 
 export function AuthForm() {
+  const [searchParams] = useSearchParams();
+  const authMode = searchParams.get("mode") || "login";
+
+  const submitBtnCaption = authMode === "login" ? "Login" : "Create User";
+  const toggleBtnCaption =
+    authMode === "login" ? "Create a new user" : "Log in with existing user";
+
   return (
     <form method="post" className="form" id="auth-form">
       <div className="icon-img">
-        <FaLock />
+        {authMode === "login" ? <FaLock /> : <FaUserPlus />}
       </div>
       <p>
         <label htmlFor="email">Email Address</label>
@@ -16,8 +23,10 @@ export function AuthForm() {
         <input type="password" id="password" name="password" minLength={7} />
       </p>
       <div className="form-actions">
-        <button>Login</button>
-        <Link to="/auth">Log in with existing user</Link>
+        <button>{submitBtnCaption}</button>
+        <Link to={`?mode=${authMode === "login" ? "signup" : "login"}`}>
+          {toggleBtnCaption}
+        </Link>
       </div>
     </form>
   );
