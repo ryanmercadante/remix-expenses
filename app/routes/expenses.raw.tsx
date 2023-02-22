@@ -1,3 +1,5 @@
-export default function RawExpensesPage() {
-  return <h1>RawExpensesPage</h1>;
+import { DUMMY_EXPENSES } from "./__app/expenses";
+
+export function loader() {
+  return DUMMY_EXPENSES;
 }
