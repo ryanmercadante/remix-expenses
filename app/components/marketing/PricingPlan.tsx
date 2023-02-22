@@ -1,8 +1,10 @@
+import type { IconType } from "react-icons";
+
 type PricingPlanProps = {
   title: string;
-  price: number;
+  price: string;
   perks: Array<string>;
-  icon: string;
+  icon: IconType;
 };
 
 export function PricingPlan({ title, price, perks, icon }: PricingPlanProps) {
