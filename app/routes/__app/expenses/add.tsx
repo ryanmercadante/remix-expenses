@@ -4,13 +4,13 @@ import { useNavigate } from "@remix-run/react";
 import { ExpenseForm } from "~/components/expenses/ExpenseForm";
 import { Modal } from "~/components/util/Modal";
 import { createExpense } from "~/data/expenses.server";
+import {
+  validateExpenseInput,
+  ValidationErrors,
+} from "~/data/validation.server";
 
-type ActionData = {
-  errors?: {
-    title?: string;
-    amount?: string;
-    date?: string;
-  };
+export type AddFormActionData = {
+  errors?: ValidationErrors;
 };
 
 export default function AddExpensesPage() {
@@ -30,25 +30,15 @@ export default function AddExpensesPage() {
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
 
-  const title = formData.get("title");
-  const amount = formData.get("amount");
-  const date = formData.get("date");
+  const title = formData.get("title") as string;
+  const amount = formData.get("amount") as string;
+  const date = formData.get("date") as string;
 
-  if (typeof title !== "string" || title.length < 3) {
-    return json<ActionData>(
-      { errors: { title: "Title must be at least 3 characters" } },
-      { status: 400 },
-    );
-  }
-  if (isNaN(Number(amount))) {
-    return json<ActionData>(
-      { errors: { amount: "Amount must be a number" } },
-      { status: 400 },
-    );
-  }
-  if (typeof date !== "string" || isNaN(new Date(date).getTime())) {
-    return json<ActionData>(
-      { errors: { date: "Invalid date" } },
+  try {
+    validateExpenseInput({ title, amount, date });
+  } catch (error) {
+    return json<AddFormActionData>(
+      { errors: error as ValidationErrors },
       { status: 400 },
     );
   }
