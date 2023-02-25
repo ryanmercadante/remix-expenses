@@ -13,20 +13,6 @@ export type AddFormActionData = {
   errors?: ValidationErrors;
 };
 
-export default function AddExpensesPage() {
-  const navigate = useNavigate();
-
-  function onClose() {
-    navigate("..");
-  }
-
-  return (
-    <Modal onClose={onClose}>
-      <ExpenseForm />
-    </Modal>
-  );
-}
-
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
 
@@ -46,3 +32,17 @@ export const action: ActionFunction = async ({ request }) => {
   await createExpense({ title, amount: Number(amount), date: new Date(date) });
   return redirect("/expenses");
 };
+
+export default function AddExpensesPage() {
+  const navigate = useNavigate();
+
+  function onClose() {
+    navigate("..");
+  }
+
+  return (
+    <Modal onClose={onClose}>
+      <ExpenseForm />
+    </Modal>
+  );
+}

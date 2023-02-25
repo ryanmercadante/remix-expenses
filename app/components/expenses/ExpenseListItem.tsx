@@ -1,7 +1,7 @@
+import { Expense } from "@prisma/client";
 import { Link } from "@remix-run/react";
-import type { Expense } from "~/routes/__app/expenses";
 
-type ExpenseListItemProps = Omit<Expense, "date">;
+type ExpenseListItemProps = Omit<Expense, "date" | "createdAt" | "updatedAt">;
 
 export function ExpenseListItem({ id, title, amount }: ExpenseListItemProps) {
   function deleteExpenseItemHandler() {

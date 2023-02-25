@@ -1,5 +1,5 @@
+import type { Expense } from "@prisma/client";
 import { useMemo } from "react";
-import type { Expense } from "~/routes/__app/expenses";
 
 function calculateSummaryStatistics(expenses: Array<Expense>) {
   const amounts = expenses.map((expense) => +expense.amount);
@@ -18,7 +18,7 @@ type ExpenseStatisticsProps = {
 export function ExpenseStatistics({ expenses }: ExpenseStatisticsProps) {
   const { minAmount, maxAmount, sum, mean } = useMemo(
     () => calculateSummaryStatistics(expenses),
-    [expenses]
+    [expenses],
   );
 
   return (

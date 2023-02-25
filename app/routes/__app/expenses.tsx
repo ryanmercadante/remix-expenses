@@ -9,6 +9,11 @@ type LoaderData = {
   expenses: Awaited<ReturnType<typeof getExpenses>>;
 };
 
+export const loader: LoaderFunction = async () => {
+  const expenses = await getExpenses();
+  return json<LoaderData>({ expenses });
+};
+
 export default function ExpensesLayout() {
   const { expenses } = useLoaderData() as unknown as LoaderData;
 
@@ -33,8 +38,3 @@ export default function ExpensesLayout() {
     </>
   );
 }
-
-export const loader: LoaderFunction = async () => {
-  const expenses = await getExpenses();
-  return json<LoaderData>({ expenses });
-};
