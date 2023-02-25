@@ -1,30 +1,17 @@
-import { Link, Outlet } from "@remix-run/react";
+import type { LoaderFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import { Link, Outlet, useLoaderData } from "@remix-run/react";
 import { FaDownload, FaPlus } from "react-icons/fa";
 import { ExpensesList } from "~/components/expenses/ExpensesList";
+import { getExpenses } from "~/data/expenses.server";
 
-export type Expense = {
-  id: string;
-  title: string;
-  amount: number;
-  date: string;
+type LoaderData = {
+  expenses: Awaited<ReturnType<typeof getExpenses>>;
 };
 
-export const DUMMY_EXPENSES: Array<Expense> = [
-  {
-    id: "1",
-    title: "First Expense",
-    amount: 12.99,
-    date: new Date().toISOString(),
-  },
-  {
-    id: "2",
-    title: "Second Expense",
-    amount: 16.99,
-    date: new Date().toISOString(),
-  },
-];
-
 export default function ExpensesLayout() {
+  const { expenses } = useLoaderData() as unknown as LoaderData;
+
   return (
     <>
       <Outlet />
@@ -41,8 +28,13 @@ export default function ExpensesLayout() {
         </section>
       </main>
       <main>
-        <ExpensesList expenses={DUMMY_EXPENSES} />
+        <ExpensesList expenses={expenses} />
       </main>
     </>
   );
 }
+
+export const loader: LoaderFunction = async () => {
+  const expenses = await getExpenses();
+  return json<LoaderData>({ expenses });
+};

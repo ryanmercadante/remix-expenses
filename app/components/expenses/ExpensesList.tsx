@@ -1,4 +1,4 @@
-import type { Expense } from "~/routes/__app/expenses";
+import type { Expense } from "@prisma/client";
 import { ExpenseListItem } from "./ExpenseListItem";
 
 type ExpensesListProps = {

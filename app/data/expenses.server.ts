@@ -7,7 +7,16 @@ export async function createExpense({
   date,
 }: Pick<Expense, "title" | "amount" | "date">) {
   try {
-    return await prisma.expense.create({ data: { title, amount, date } });
+    return prisma.expense.create({ data: { title, amount, date } });
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getExpenses() {
+  try {
+    return prisma.expense.findMany({ orderBy: { date: "desc" } });
   } catch (error) {
     console.log(error);
     throw error;
