@@ -3,14 +3,14 @@ import { json, redirect } from "@remix-run/node";
 import { useNavigate } from "@remix-run/react";
 import { ExpenseForm } from "~/components/expenses/ExpenseForm";
 import { Modal } from "~/components/util/Modal";
-import { updatedExpense } from "~/data/expenses.server";
+import { deleteExpense, updatedExpense } from "~/data/expenses.server";
 import {
   validateExpenseInput,
   ValidationErrors,
 } from "~/data/validation.server";
 import { ExpenseFormActionData } from "./add";
 
-export async function action({ params, request }: ActionArgs) {
+async function handlePostOrPatch(expenseId: string, request: Request) {
   const formData = await request.formData();
 
   const title = formData.get("title") as string;
@@ -26,15 +26,32 @@ export async function action({ params, request }: ActionArgs) {
     );
   }
 
-  if (!params.id) {
-    throw new Response("Id not found", { status: 404 });
-  }
-
-  await updatedExpense(params.id, {
+  await updatedExpense(expenseId, {
     title,
     amount: Number(amount),
     date: new Date(date),
   });
+}
+
+export async function action({ params, request }: ActionArgs) {
+  if (!params.id) {
+    throw new Response("Id not found", { status: 404 });
+  }
+
+  switch (request.method) {
+    case "POST":
+      await handlePostOrPatch(params.id, request);
+      break;
+    case "PATCH":
+      await handlePostOrPatch(params.id, request);
+      break;
+    case "DELETE":
+      await deleteExpense(params.id);
+      break;
+    default:
+      console.log("How did you get here?!");
+  }
+
   return redirect("/expenses");
 }
 

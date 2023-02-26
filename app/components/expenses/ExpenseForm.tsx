@@ -26,7 +26,11 @@ export function ExpenseForm() {
   const today = new Date().toISOString().slice(0, 10); // yields something like 2023-09-10
 
   return (
-    <Form method="post" className="form" id="expense-form">
+    <Form
+      method={expense.title === "" ? "post" : "patch"}
+      className="form"
+      id="expense-form"
+    >
       <p>
         <label htmlFor="title">Expense Title</label>
         <input

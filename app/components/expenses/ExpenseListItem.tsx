@@ -1,5 +1,5 @@
 import { Expense } from "@prisma/client";
-import { Link } from "@remix-run/react";
+import { Form, Link } from "@remix-run/react";
 
 type ExpenseListItemProps = Omit<Expense, "date" | "createdAt" | "updatedAt">;
 
@@ -15,7 +15,10 @@ export function ExpenseListItem({ id, title, amount }: ExpenseListItemProps) {
         <p className="expense-amount">${amount.toFixed(2)}</p>
       </div>
       <menu className="expense-actions">
-        <button onClick={deleteExpenseItemHandler}>Delete</button>
+        {/* <button onClick={deleteExpenseItemHandler}>Delete</button> */}
+        <Form method="delete" action={`/expenses/${id}`}>
+          <button>Delete</button>
+        </Form>
         <Link to={id}>Edit</Link>
       </menu>
     </article>
