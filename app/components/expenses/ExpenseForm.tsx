@@ -20,6 +20,11 @@ export function ExpenseForm() {
     amount: "",
     date: "",
   };
+
+  if (params.id && !expense.title) {
+    return <p>Invalid expense id.</p>;
+  }
+
   const navigation = useNavigation();
   const isSubmitting = navigation.state !== "idle";
 
