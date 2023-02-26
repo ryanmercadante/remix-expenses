@@ -1,20 +1,27 @@
+import type { Expense } from "@prisma/client";
 import {
   Form,
   Link,
   useActionData,
-  useLoaderData,
+  useMatches,
   useNavigation,
+  useParams,
 } from "@remix-run/react";
-import { ExpenseLoaderData } from "~/routes/__app/expenses/$id";
-import { AddFormActionData } from "~/routes/__app/expenses/add";
+import type { AddFormActionData } from "~/routes/__app/expenses/add";
 
 export function ExpenseForm() {
   const validationErrors = useActionData() as AddFormActionData;
-  const loaderData = useLoaderData() as unknown as ExpenseLoaderData;
+  const params = useParams();
+  const matches = useMatches();
+  const expense: Expense | Pick<Expense, "title" | "amount" | "date"> = matches
+    .find((match) => match.id === "routes/__app/expenses")
+    ?.data?.expenses.find((e: Expense) => e.id === params.id) || {
+    title: "",
+    amount: "",
+    date: "",
+  };
   const navigation = useNavigation();
   const isSubmitting = navigation.state !== "idle";
-
-  const expense = loaderData?.expense || { title: "", amount: "", date: "" };
 
   const today = new Date().toISOString().slice(0, 10); // yields something like 2023-09-10
 
