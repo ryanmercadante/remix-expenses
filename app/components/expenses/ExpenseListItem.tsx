@@ -1,11 +1,26 @@
 import { Expense } from "@prisma/client";
-import { Form, Link } from "@remix-run/react";
+import { Link, useFetcher } from "@remix-run/react";
 
 type ExpenseListItemProps = Omit<Expense, "date" | "createdAt" | "updatedAt">;
 
 export function ExpenseListItem({ id, title, amount }: ExpenseListItemProps) {
+  const fetcher = useFetcher();
+
   function deleteExpenseItemHandler() {
-    // tbd
+    const proceed = confirm("Are you sure you want to delete this item?");
+    if (!proceed) return;
+    fetcher.submit(null, {
+      method: "delete",
+      action: `/expenses/${id}`,
+    });
+  }
+
+  if (fetcher.state !== "idle") {
+    return (
+      <article className="expense-item locked">
+        <p>Deleting...</p>
+      </article>
+    );
   }
 
   return (
@@ -15,10 +30,7 @@ export function ExpenseListItem({ id, title, amount }: ExpenseListItemProps) {
         <p className="expense-amount">${amount.toFixed(2)}</p>
       </div>
       <menu className="expense-actions">
-        {/* <button onClick={deleteExpenseItemHandler}>Delete</button> */}
-        <Form method="delete" action={`/expenses/${id}`}>
-          <button>Delete</button>
-        </Form>
+        <button onClick={deleteExpenseItemHandler}>Delete</button>
         <Link to={id}>Edit</Link>
       </menu>
     </article>

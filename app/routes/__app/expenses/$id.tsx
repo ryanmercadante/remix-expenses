@@ -10,6 +10,10 @@ import {
 } from "~/data/validation.server";
 import { ExpenseFormActionData } from "./add";
 
+type DeleteAction = {
+  expenseId: string;
+};
+
 async function handlePostOrPatch(expenseId: string, request: Request) {
   const formData = await request.formData();
 
@@ -47,7 +51,7 @@ export async function action({ params, request }: ActionArgs) {
       break;
     case "DELETE":
       await deleteExpense(params.id);
-      break;
+      return json<DeleteAction>({ expenseId: params.id });
     default:
       console.log("How did you get here?!");
   }
