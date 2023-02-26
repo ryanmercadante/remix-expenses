@@ -7,10 +7,10 @@ import {
   useNavigation,
   useParams,
 } from "@remix-run/react";
-import type { AddFormActionData } from "~/routes/__app/expenses/add";
+import type { ExpenseFormActionData } from "~/routes/__app/expenses/add";
 
 export function ExpenseForm() {
-  const validationErrors = useActionData() as AddFormActionData;
+  const validationErrors = useActionData() as ExpenseFormActionData;
   const params = useParams();
   const matches = useMatches();
   const expense: Expense | Pick<Expense, "title" | "amount" | "date"> = matches

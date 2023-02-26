@@ -9,7 +9,7 @@ import {
   ValidationErrors,
 } from "~/data/validation.server";
 
-export type AddFormActionData = {
+export type ExpenseFormActionData = {
   errors?: ValidationErrors;
 };
 
@@ -23,7 +23,7 @@ export const action: ActionFunction = async ({ request }) => {
   try {
     validateExpenseInput({ title, amount, date });
   } catch (error) {
-    return json<AddFormActionData>(
+    return json<ExpenseFormActionData>(
       { errors: error as ValidationErrors },
       { status: 400 },
     );

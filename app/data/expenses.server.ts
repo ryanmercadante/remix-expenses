@@ -31,3 +31,18 @@ export async function getExpense(id: string) {
     throw error;
   }
 }
+
+export async function updatedExpense(
+  id: string,
+  { title, amount, date }: Pick<Expense, "title" | "amount" | "date">,
+) {
+  try {
+    return prisma.expense.update({
+      where: { id },
+      data: { title, amount, date },
+    });
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
