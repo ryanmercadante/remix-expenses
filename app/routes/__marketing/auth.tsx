@@ -1,9 +1,11 @@
-import { ActionArgs, LinksFunction, json } from "@remix-run/node";
+import { ActionArgs, LinksFunction, json, redirect } from "@remix-run/node";
 import { AuthForm } from "~/components/auth/AuthForm";
+import { signup } from "~/data/auth.server";
 import {
   ValidationErrors,
   validateCredentials,
 } from "~/data/validation.server";
+import { CustomError } from "~/lib/error";
 import styles from "~/styles/auth.css";
 
 export type AuthActionData = {
@@ -29,10 +31,20 @@ export async function action({ request }: ActionArgs) {
     );
   }
 
-  if (authMode === "login") {
-    // login logic
-  } else {
-    // signup logic (create user)
+  try {
+    if (authMode === "login") {
+      // login logic
+    } else {
+      await signup({ email, password });
+      return redirect("/expenses");
+    }
+  } catch (error) {
+    if (error instanceof CustomError && error?.status === 422) {
+      return json<AuthActionData>(
+        { errors: { email: error.message } as ValidationErrors },
+        { status: 422 },
+      );
+    }
   }
 }
 
