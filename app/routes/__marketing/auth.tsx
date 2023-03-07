@@ -1,6 +1,14 @@
-import type { ActionArgs, LinksFunction } from "@remix-run/node";
+import { ActionArgs, LinksFunction, json } from "@remix-run/node";
 import { AuthForm } from "~/components/auth/AuthForm";
+import {
+  ValidationErrors,
+  validateCredentials,
+} from "~/data/validation.server";
 import styles from "~/styles/auth.css";
+
+export type AuthActionData = {
+  errors?: ValidationErrors;
+};
 
 export async function action({ request }: ActionArgs) {
   const { searchParams } = new URL(request.url);
@@ -12,6 +20,14 @@ export async function action({ request }: ActionArgs) {
   const password = formData.get("password") as string;
 
   // validate user input
+  try {
+    validateCredentials({ email, password });
+  } catch (error) {
+    return json<AuthActionData>(
+      { errors: error as ValidationErrors },
+      { status: 400 },
+    );
+  }
 
   if (authMode === "login") {
     // login logic
