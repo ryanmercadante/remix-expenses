@@ -1,8 +1,9 @@
-import type { ActionFunction } from "@remix-run/node";
+import type { ActionArgs, ActionFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useNavigate } from "@remix-run/react";
 import { ExpenseForm } from "~/components/expenses/ExpenseForm";
 import { Modal } from "~/components/util/Modal";
+import { requireUserSession } from "~/data/auth.server";
 import { createExpense } from "~/data/expenses.server";
 import {
   validateExpenseInput,
@@ -13,7 +14,9 @@ export type ExpenseFormActionData = {
   errors?: ValidationErrors;
 };
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request }: ActionArgs) {
+  const userId = await requireUserSession(request);
+
   const formData = await request.formData();
 
   const title = formData.get("title") as string;
@@ -29,9 +32,13 @@ export const action: ActionFunction = async ({ request }) => {
     );
   }
 
-  await createExpense({ title, amount: Number(amount), date: new Date(date) });
+  await createExpense(userId, {
+    title,
+    amount: Number(amount),
+    date: new Date(date),
+  });
   return redirect("/expenses");
-};
+}
 
 export default function AddExpensesPage() {
   const navigate = useNavigate();

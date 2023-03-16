@@ -1,14 +1,15 @@
 import type { Expense } from "@prisma/client";
 import { prisma } from "./db.server";
 
-export async function createExpense({
-  title,
-  amount,
-  date,
-}: Pick<Expense, "title" | "amount" | "date">) {
+type CreateExpenseData = Pick<Expense, "title" | "amount" | "date">;
+
+export async function createExpense(
+  userId: string,
+  { amount, date, title }: CreateExpenseData,
+) {
   try {
     const expense = await prisma.expense.create({
-      data: { title, amount, date },
+      data: { amount, date, title, User: { connect: { id: userId } } },
     });
     return expense;
   } catch (error) {
@@ -16,9 +17,14 @@ export async function createExpense({
   }
 }
 
-export async function getExpenses() {
+export async function getExpenses(userId: string) {
+  if (!userId) {
+    throw new Error(`Failed to get expenses`);
+  }
+
   try {
     const expenses = await prisma.expense.findMany({
+      where: { userId },
       orderBy: { date: "desc" },
     });
     return expenses;

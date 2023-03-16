@@ -19,8 +19,8 @@ type LoaderData = {
 };
 
 export async function loader({ request }: LoaderArgs) {
-  await requireUserSession(request);
-  const expenses = await getExpenses();
+  const userId = await requireUserSession(request);
+  const expenses = await getExpenses(userId);
   if (!expenses || expenses.length === 0) {
     throw json<LoaderError>(
       { message: "Could not load expenses for the requested analysis." },
