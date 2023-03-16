@@ -1,4 +1,4 @@
-import { type LoaderFunction, json } from "@remix-run/node";
+import { json, type LoaderArgs } from "@remix-run/node";
 import {
   CatchBoundaryComponent,
   useCatch,
@@ -7,6 +7,7 @@ import {
 import { Chart } from "~/components/expenses/Chart";
 import { ExpenseStatistics } from "~/components/expenses/ExpenseStatistics";
 import { Error } from "~/components/util/Error";
+import { requireUserSession } from "~/data/auth.server";
 import { getExpenses } from "~/data/expenses.server";
 
 type LoaderError = {
@@ -17,7 +18,8 @@ type LoaderData = {
   expenses: Awaited<ReturnType<typeof getExpenses>>;
 };
 
-export const loader: LoaderFunction = async () => {
+export async function loader({ request }: LoaderArgs) {
+  await requireUserSession(request);
   const expenses = await getExpenses();
   if (!expenses || expenses.length === 0) {
     throw json<LoaderError>(
@@ -26,7 +28,7 @@ export const loader: LoaderFunction = async () => {
     );
   }
   return json<LoaderData>({ expenses });
-};
+}
 
 export default function ExpenseAnalysisPage() {
   const { expenses } = useLoaderData() as unknown as LoaderData;
