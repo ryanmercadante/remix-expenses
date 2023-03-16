@@ -34,11 +34,9 @@ export async function action({ request }: ActionArgs) {
   try {
     if (authMode === "login") {
       return await login({ email, password });
-    } else {
-      return await signup({ email, password });
     }
+    return await signup({ email, password });
   } catch (error) {
-    console.log("caught an error", error);
     if (error instanceof CustomError && error?.status === 422) {
       return json<AuthActionData>(
         { errors: { email: error.message } as ValidationErrors },
