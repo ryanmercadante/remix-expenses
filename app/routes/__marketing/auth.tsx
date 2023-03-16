@@ -1,6 +1,6 @@
-import { ActionArgs, LinksFunction, json, redirect } from "@remix-run/node";
+import { ActionArgs, LinksFunction, json } from "@remix-run/node";
 import { AuthForm } from "~/components/auth/AuthForm";
-import { signup } from "~/data/auth.server";
+import { login, signup } from "~/data/auth.server";
 import {
   ValidationErrors,
   validateCredentials,
@@ -33,12 +33,12 @@ export async function action({ request }: ActionArgs) {
 
   try {
     if (authMode === "login") {
-      // login logic
+      return await login({ email, password });
     } else {
-      await signup({ email, password });
-      return redirect("/expenses");
+      return await signup({ email, password });
     }
   } catch (error) {
+    console.log("caught an error", error);
     if (error instanceof CustomError && error?.status === 422) {
       return json<AuthActionData>(
         { errors: { email: error.message } as ValidationErrors },
