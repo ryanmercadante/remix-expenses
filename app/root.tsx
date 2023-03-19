@@ -15,6 +15,7 @@ import {
   useCatch,
   useMatches,
 } from "@remix-run/react";
+import { Analytics } from "@vercel/analytics/react";
 
 import sharedStyles from "~/styles/shared.css";
 import { Error } from "./components/util/Error";
@@ -50,6 +51,7 @@ function Document({ title, children }: DocumentProps) {
       </head>
       <body>
         {children}
+        <Analytics />
         <ScrollRestoration />
         {!disabledJS && <Scripts />}
         <LiveReload />
