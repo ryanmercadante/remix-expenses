@@ -46,3 +46,9 @@ export const meta: MetaFunction = () => {
     description: "See our pricing plans.",
   };
 };
+
+export function headers({ parentHeaders }: { parentHeaders: Headers }) {
+  return {
+    "Cache-Control": parentHeaders.get("Cache-Control"),
+  };
+}

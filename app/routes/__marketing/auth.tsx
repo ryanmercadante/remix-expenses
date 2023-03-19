@@ -51,3 +51,9 @@ export default function AuthPage() {
 }
 
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
+
+export function headers({ parentHeaders }: { parentHeaders: Headers }) {
+  return {
+    "Cache-Control": parentHeaders.get("Cache-Control"),
+  };
+}

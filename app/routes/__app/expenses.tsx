@@ -14,7 +14,10 @@ type LoaderData = {
 export async function loader({ request }: LoaderArgs) {
   const userId = await requireUserSession(request);
   const expenses = await getExpenses(userId);
-  return json<LoaderData>({ expenses });
+  return json<LoaderData>(
+    { expenses },
+    { headers: { "Cache-Control": "max-age=3" } },
+  );
 }
 
 export default function ExpensesLayout() {
@@ -51,4 +54,10 @@ export default function ExpensesLayout() {
       </main>
     </>
   );
+}
+
+export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
+  return {
+    "Cache-Control": loaderHeaders.get("Cache-Control"),
+  };
 }

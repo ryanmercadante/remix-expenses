@@ -19,3 +19,9 @@ export default function MarkingLayout() {
 }
 
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
+
+export function headers() {
+  return {
+    "Cache-Control": "max-age=3600",
+  };
+}

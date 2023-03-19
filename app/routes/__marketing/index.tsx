@@ -1,4 +1,4 @@
-import type { MetaFunction } from "@remix-run/node";
+import type { Headers, MetaFunction } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import { FaArrowRight, FaDollarSign, FaChartBar } from "react-icons/fa";
 
@@ -53,3 +53,9 @@ export const meta: MetaFunction = () => {
     description: "Manage your expenses in one central place.",
   };
 };
+
+export function headers({ parentHeaders }: { parentHeaders: Headers }) {
+  return {
+    "Cache-Control": parentHeaders.get("Cache-Control"),
+  };
+}
