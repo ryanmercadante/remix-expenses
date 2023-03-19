@@ -14,6 +14,7 @@ import {
   Scripts,
   ScrollRestoration,
   useCatch,
+  useLoaderData,
   useMatches,
 } from "@remix-run/react";
 import { Analytics } from "@vercel/analytics/react";
@@ -44,9 +45,10 @@ declare global {
 type DocumentProps = {
   title?: string;
   children?: JSX.Element;
+  ENV: SerializeFrom<typeof loader>["ENV"];
 };
 
-function Document({ title, children }: DocumentProps) {
+function Document({ title, children, ENV }: DocumentProps) {
   const matches = useMatches();
 
   const disabledJS = matches.some((match) => match.handle?.disableJS);
@@ -82,8 +84,10 @@ function Document({ title, children }: DocumentProps) {
 }
 
 export default function App() {
+  const { ENV } = useLoaderData<typeof loader>();
+
   return (
-    <Document>
+    <Document ENV={ENV}>
       <Outlet />
     </Document>
   );
