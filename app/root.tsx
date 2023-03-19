@@ -20,7 +20,7 @@ import { Error } from "./components/util/Error";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
-  title: "New Remix App",
+  title: "Remix Expenses",
   viewport: "width=device-width,initial-scale=1",
 });
 

@@ -1,11 +1,11 @@
 import type { Expense } from "@prisma/client";
 import { prisma } from "./db.server";
 
-type CreateExpenseData = Pick<Expense, "title" | "amount" | "date">;
+type ExpenseFormData = Pick<Expense, "title" | "amount" | "date">;
 
 export async function createExpense(
   userId: string,
-  { amount, date, title }: CreateExpenseData,
+  { amount, date, title }: ExpenseFormData,
 ) {
   try {
     const expense = await prisma.expense.create({
@@ -44,12 +44,12 @@ export async function getExpense(id: string) {
 
 export async function updatedExpense(
   id: string,
-  { title, amount, date }: Pick<Expense, "title" | "amount" | "date">,
+  { amount, date, title }: ExpenseFormData,
 ) {
   try {
     const expense = await prisma.expense.update({
       where: { id },
-      data: { title, amount, date },
+      data: { amount, date, title },
     });
     return expense;
   } catch (error) {

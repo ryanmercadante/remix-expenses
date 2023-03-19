@@ -1,4 +1,4 @@
-import type { ActionArgs } from "@remix-run/node";
+import type { ActionArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useNavigate } from "@remix-run/react";
 import { ExpenseForm } from "~/components/expenses/ExpenseForm";
@@ -9,6 +9,7 @@ import {
   ValidationErrors,
 } from "~/data/validation.server";
 import { ExpenseFormActionData } from "./add";
+import { Expense } from "@prisma/client";
 
 type DeleteAction = {
   expenseId: string;
@@ -72,3 +73,14 @@ export default function UpdateExpensesPage() {
     </Modal>
   );
 }
+
+export const meta: MetaFunction = ({ params, parentsData }) => {
+  const expense: Expense | undefined = parentsData[
+    "routes/__app/expenses"
+  ]?.expenses?.find((e: Expense) => e.id === params.id);
+
+  return {
+    title: `Expense - ${expense?.title}` || "Expense not found",
+    description: "Update expense.",
+  };
+};

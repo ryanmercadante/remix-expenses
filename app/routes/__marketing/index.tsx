@@ -1,3 +1,4 @@
+import type { MetaFunction } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import { FaArrowRight, FaDollarSign, FaChartBar } from "react-icons/fa";
 
@@ -46,4 +47,9 @@ export default function Index() {
   );
 }
 
-export function meta() {}
+export const meta: MetaFunction = () => {
+  return {
+    title: "Remix Expenses - The Complete App",
+    description: "Manage your expenses in one central place.",
+  };
+};
